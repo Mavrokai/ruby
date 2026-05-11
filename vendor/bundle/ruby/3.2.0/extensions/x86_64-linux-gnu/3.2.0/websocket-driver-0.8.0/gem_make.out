@@ -1,0 +1,18 @@
+current directory: /home/verscheure/Projects/ROR/W-WEB-401-LIL-4-1-ruby-1/vendor/bundle/ruby/3.2.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+/usr/bin/ruby3.2 -I/usr/lib/ruby/vendor_ruby extconf.rb
+creating Makefile
+
+current directory: /home/verscheure/Projects/ROR/W-WEB-401-LIL-4-1-ruby-1/vendor/bundle/ruby/3.2.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20260511-48364-9iv7dt sitelibdir\=./.gem.20260511-48364-9iv7dt clean
+
+current directory: /home/verscheure/Projects/ROR/W-WEB-401-LIL-4-1-ruby-1/vendor/bundle/ruby/3.2.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20260511-48364-9iv7dt sitelibdir\=./.gem.20260511-48364-9iv7dt
+compiling websocket_mask.c
+linking shared-object websocket_mask.so
+
+current directory: /home/verscheure/Projects/ROR/W-WEB-401-LIL-4-1-ruby-1/vendor/bundle/ruby/3.2.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20260511-48364-9iv7dt sitelibdir\=./.gem.20260511-48364-9iv7dt install
+/usr/bin/install -c -m 0755 websocket_mask.so ./.gem.20260511-48364-9iv7dt
+
+current directory: /home/verscheure/Projects/ROR/W-WEB-401-LIL-4-1-ruby-1/vendor/bundle/ruby/3.2.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20260511-48364-9iv7dt sitelibdir\=./.gem.20260511-48364-9iv7dt clean
