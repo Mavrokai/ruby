@@ -1,0 +1,8 @@
+alice:
+  name: Alice
+  level: 1
+  experience: 0
+  max_health: 10
+  current_health: 10
+  force: 10
+  available_stat_points: 10

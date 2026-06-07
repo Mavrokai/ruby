@@ -1,0 +1,38 @@
+<% content_for :title, @player.name %>
+
+<h1><%= @player.name %></h1>
+
+<div class="panel">
+  <h2 class="panel-title">Caractéristiques</h2>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="label">Niveau</div><div class="value"><%= @player.level %></div></div>
+    <div class="stat-card"><div class="label">XP</div><div class="value"><%= @player.experience %></div></div>
+    <div class="stat-card"><div class="label">PV</div><div class="value"><%= @player.current_health %> / <%= @player.max_health %></div></div>
+    <div class="stat-card"><div class="label">Force</div><div class="value"><%= @player.force %></div></div>
+    <div class="stat-card"><div class="label">Or</div><div class="value"><%= @player.gold %></div></div>
+    <div class="stat-card"><div class="label">Points libres</div><div class="value"><%= @player.available_stat_points %></div></div>
+  </div>
+</div>
+
+<div class="panel">
+  <h2 class="panel-title">Progression des quêtes</h2>
+  <% if @progresses.empty? %>
+    <p class="muted">Ce joueur n'a commencé aucune quête.</p>
+  <% else %>
+    <table class="data">
+      <thead><tr><th>Quête</th><th>Statut</th><th>Étape</th><th>Mise à jour</th></tr></thead>
+      <tbody>
+        <% @progresses.each do |p| %>
+          <tr>
+            <td><%= p.quest.title %></td>
+            <td><span class="tag"><%= p.status %></span></td>
+            <td><%= p.current_step_position %></td>
+            <td><%= l(p.updated_at, format: :short) rescue p.updated_at %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>
+
+<%= link_to "Retour", admin_players_path, class: "btn secondary" %>

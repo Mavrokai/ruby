@@ -1,0 +1,34 @@
+<% content_for :title, "Nouveau héros" %>
+
+<div class="container narrow">
+  <h1>Créer un nouveau héros</h1>
+
+  <%= form_with model: @player, local: true, html: { multipart: true }, class: "panel" do |f| %>
+    <% if @player.errors.any? %>
+      <div class="errors">
+        <ul>
+          <% @player.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :name, "Nom du héros" %>
+      <%= f.text_field :name, autofocus: true, required: true %>
+    </div>
+
+    <div class="field">
+      <%= f.label :avatar, "Portrait (facultatif)" %>
+      <%= f.file_field :avatar, accept: "image/*" %>
+    </div>
+
+    <p class="muted">Votre héros commencera niveau 1 avec Force 10, PV 10 et 10 points à répartir.</p>
+
+    <div class="btn-row">
+      <%= f.submit "Créer le héros", class: "btn" %>
+      <%= link_to "Annuler", root_path, class: "btn secondary" %>
+    </div>
+  <% end %>
+</div>

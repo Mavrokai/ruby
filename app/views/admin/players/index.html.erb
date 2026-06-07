@@ -1,0 +1,27 @@
+<% content_for :title, "Héros" %>
+
+<h1>Héros</h1>
+
+<% if @players.empty? %>
+  <div class="panel empty-state">Aucun héros pour le moment.</div>
+<% else %>
+  <table class="data">
+    <thead>
+      <tr><th>Nom</th><th>Niveau</th><th>Force</th><th>PV</th><th>Quêtes terminées</th><th>Quête active</th><th></th></tr>
+    </thead>
+    <tbody>
+      <% @players.each do |player| %>
+        <% active = player.quest_progresses.find { |p| p.status == "active" } %>
+        <tr>
+          <td><%= link_to player.name, admin_player_path(player) %></td>
+          <td><%= player.level %></td>
+          <td><%= player.force %></td>
+          <td><%= player.current_health %> / <%= player.max_health %></td>
+          <td><%= player.quest_progresses.select { |p| p.status == "completed" }.size %></td>
+          <td><%= active ? "#{active.quest.title} (étape #{active.current_step_position})" : "—" %></td>
+          <td class="right"><%= link_to "Voir", admin_player_path(player), class: "btn secondary" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

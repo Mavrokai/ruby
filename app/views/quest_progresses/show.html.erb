@@ -1,0 +1,99 @@
+<% content_for :title, @progress.quest.title %>
+
+<% step = @progress.current_step %>
+
+<h1><%= @progress.quest.title %></h1>
+<p class="muted">Étape <%= @progress.current_step_position %> / <%= @progress.quest.quest_steps.size %></p>
+
+<% if flash[:combat_log].present? %>
+  <div class="combat-log">
+    <% Array(flash[:combat_log]).each do |line| %>
+      <p><%= line %></p>
+    <% end %>
+  </div>
+<% end %>
+
+<% if @progress.in_combat? %>
+  <div class="panel">
+    <h2 class="panel-title">Combat contre <%= step.npc.name %></h2>
+
+    <div class="combat-arena">
+      <div class="combat-side">
+        <div class="avatar" style="border-color: <%= current_player.accent_color %>;">
+          <% if current_player.avatar.attached? %>
+            <%= image_tag current_player.avatar %>
+          <% else %>
+            <%= current_player.name.first.upcase %>
+          <% end %>
+        </div>
+        <h3><%= current_player.name %></h3>
+        <p class="muted">Force <%= current_player.total_force %></p>
+        <div class="hp-bar"><div style="width: <%= (current_player.current_health.to_f / [current_player.total_max_health, 1].max * 100).round %>%"></div></div>
+        <p><%= current_player.current_health %> / <%= current_player.total_max_health %> PV</p>
+      </div>
+      <div class="combat-vs">⚔</div>
+      <div class="combat-side">
+        <div class="avatar">
+          <% if step.npc.avatar.attached? %>
+            <%= image_tag step.npc.avatar %>
+          <% else %>
+            <%= step.npc.name.first.upcase %>
+          <% end %>
+        </div>
+        <h3><%= step.npc.name %></h3>
+        <p class="muted">Force <%= step.npc.force %></p>
+        <div class="hp-bar"><div style="width: <%= (@progress.current_npc_health.to_f / [step.npc.max_health, 1].max * 100).round %>%"></div></div>
+        <p><%= @progress.current_npc_health %> / <%= step.npc.max_health %> PV</p>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <%= button_to "Attaquer", attack_quest_progress_path(@progress), method: :post, class: "btn" %>
+      <%= button_to "Fuir", flee_quest_progress_path(@progress), method: :post, class: "btn secondary" %>
+    </div>
+  </div>
+<% else %>
+  <div class="panel">
+    <h2 class="panel-title">Énigme</h2>
+    <p><strong><%= step.riddle_question %></strong></p>
+
+    <%= form_with url: answer_quest_progress_path(@progress), method: :post, local: true do %>
+      <% step.answers.each do |answer| %>
+        <div class="field">
+          <label>
+            <input type="radio" name="answer_id" value="<%= answer.id %>" required>
+            <%= answer.content %>
+          </label>
+        </div>
+      <% end %>
+      <div class="btn-row">
+        <button type="submit" class="btn">Répondre</button>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="panel">
+    <h2 class="panel-title">Ou affronter le PNJ</h2>
+    <p>Le PNJ <strong><%= step.npc.name %></strong> garde l'étape. Force <%= step.npc.force %>, PV <%= step.npc.max_health %>.</p>
+    <%= button_to "Combattre", start_combat_quest_progress_path(@progress), method: :post, class: "btn danger" %>
+  </div>
+<% end %>
+
+<div class="panel" data-controller="chat">
+  <h2 class="panel-title">Messages du maître du jeu</h2>
+  <%= turbo_stream_from "party_chat_#{@progress.id}" %>
+  <div class="chat-window" data-chat-target="messages" id="chat-messages-<%= @progress.id %>">
+    <% @chat_messages.each do |message| %>
+      <%= render "chat_messages/message", message: message %>
+    <% end %>
+  </div>
+  <%= form_with url: send_message_quest_progress_path(@progress), method: :post,
+                data: { chat_target: "form", action: "turbo:submit-end->chat#reset" } do %>
+    <div class="row">
+      <input type="text" name="body" placeholder="Écrire au maître du jeu…" autocomplete="off" required style="flex: 1;">
+      <button type="submit" class="btn">Envoyer</button>
+    </div>
+  <% end %>
+</div>
+
+<p><%= link_to "Retour au menu", game_menu_path, class: "btn secondary" %></p>

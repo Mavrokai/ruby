@@ -1,0 +1,36 @@
+<% content_for :title, "Quêtes" %>
+
+<div class="row between">
+  <h1>Quêtes</h1>
+  <%= link_to "Nouvelle quête", new_admin_quest_path, class: "btn" %>
+</div>
+
+<% if @quests.empty? %>
+  <div class="panel empty-state">Aucune quête pour le moment.</div>
+<% else %>
+  <table class="data">
+    <thead>
+      <tr>
+        <th>Titre</th>
+        <th>Étapes</th>
+        <th>XP final</th>
+        <th>Récompenses</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @quests.each do |quest| %>
+        <tr>
+          <td><%= link_to quest.title, admin_quest_path(quest) %></td>
+          <td><%= quest.quest_steps.size %></td>
+          <td><%= quest.final_xp_reward %></td>
+          <td><%= quest.reward_items.size %></td>
+          <td class="right">
+            <%= link_to "Éditer", edit_admin_quest_path(quest), class: "btn secondary" %>
+            <%= button_to "Supprimer", admin_quest_path(quest), method: :delete, form: { class: "inline-form", data: { turbo_confirm: "Supprimer cette quête ?" } }, class: "btn danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

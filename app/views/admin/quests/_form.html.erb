@@ -1,0 +1,42 @@
+<%= form_with model: [ :admin, quest ], local: true, class: "panel" do |f| %>
+  <% if quest.errors.any? %>
+    <div class="errors">
+      <ul>
+        <% quest.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :title, "Titre" %>
+    <%= f.text_field :title, required: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :description, "Description" %>
+    <%= f.text_area :description %>
+  </div>
+
+  <div class="field">
+    <%= f.label :final_xp_reward, "XP de fin de quête" %>
+    <%= f.number_field :final_xp_reward, min: 0 %>
+  </div>
+
+  <div class="field">
+    <%= f.label :gold_reward, "Or de fin de quête" %>
+    <%= f.number_field :gold_reward, min: 0 %>
+  </div>
+
+  <div class="field">
+    <%= f.label :reward_item_ids, "Objets proposés en récompense" %>
+    <%= f.collection_select :reward_item_ids, Item.order(:slot, :name), :id, ->(i) { "[#{i.slot_label}] #{i.name}" }, {}, multiple: true, size: 8 %>
+    <p class="muted">Maintenez Ctrl/Cmd pour en sélectionner plusieurs.</p>
+  </div>
+
+  <div class="btn-row">
+    <%= f.submit class: "btn" %>
+    <%= link_to "Annuler", admin_quests_path, class: "btn secondary" %>
+  </div>
+<% end %>

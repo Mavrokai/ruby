@@ -1,0 +1,30 @@
+<% content_for :title, "Ajouter à la boutique" %>
+
+<h1>Ajouter un objet à la boutique</h1>
+
+<%= form_with model: [ :admin, @listing ], local: true, class: "panel" do |f| %>
+  <% if @listing.errors.any? %>
+    <div class="errors">
+      <ul>
+        <% @listing.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :item_id, "Objet" %>
+    <%= f.collection_select :item_id, Item.order(:slot, :name), :id, ->(i) { "[#{i.slot_label}] #{i.name}" }, prompt: "Choisir un objet" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :price, "Prix (or)" %>
+    <%= f.number_field :price, min: 0 %>
+  </div>
+
+  <div class="btn-row">
+    <%= f.submit "Ajouter", class: "btn" %>
+    <%= link_to "Annuler", admin_market_listings_path, class: "btn secondary" %>
+  </div>
+<% end %>

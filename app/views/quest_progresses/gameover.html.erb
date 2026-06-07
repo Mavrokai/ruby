@@ -1,0 +1,11 @@
+<% content_for :title, "Game Over" %>
+
+<div class="container narrow center">
+  <h1 style="color: var(--danger);">Game Over</h1>
+  <p>Votre héros est tombé au combat lors de l'étape <%= @progress.current_step_position %> de la quête <strong><%= @progress.quest.title %></strong>.</p>
+
+  <div class="btn-row" style="justify-content: center;">
+    <%= button_to "Recommencer la quête", retry_quest_progress_path(@progress), method: :post, class: "btn" %>
+    <%= link_to "Retour au menu", game_menu_path, class: "btn secondary" %>
+  </div>
+</div>

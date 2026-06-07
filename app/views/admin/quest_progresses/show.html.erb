@@ -1,0 +1,39 @@
+<% content_for :title, "Suivi — #{@progress.player.name}" %>
+
+<h1><%= @progress.player.name %> — <%= @progress.quest.title %></h1>
+
+<div class="stat-grid">
+  <div class="stat-card"><div class="label">Statut</div><div class="value"><%= @progress.status %></div></div>
+  <div class="stat-card"><div class="label">Étape</div><div class="value"><%= @progress.current_step_position %> / <%= @progress.quest.quest_steps.size %></div></div>
+  <div class="stat-card"><div class="label">PV héros</div><div class="value"><%= @progress.player.current_health %> / <%= @progress.player.total_max_health %></div></div>
+  <div class="stat-card"><div class="label">Combat</div><div class="value"><%= @progress.in_combat? ? "#{@progress.current_npc_health} PV" : "—" %></div></div>
+</div>
+
+<div class="panel" data-controller="chat">
+  <h2 class="panel-title">Discussion avec le héros</h2>
+  <p class="muted">Parlez au joueur en incarnant un PNJ. Les messages apparaissent en direct des deux côtés.</p>
+  <%= turbo_stream_from "party_chat_#{@progress.id}" %>
+  <div class="chat-window" data-chat-target="messages" id="chat-messages-<%= @progress.id %>">
+    <% @chat_messages.each do |message| %>
+      <%= render "chat_messages/message", message: message %>
+    <% end %>
+  </div>
+  <%= form_with url: send_message_admin_quest_progress_path(@progress), method: :post,
+                data: { chat_target: "form", action: "turbo:submit-end->chat#reset" } do %>
+    <div class="field">
+      <label for="npc_id">Parler en tant que</label>
+      <select name="npc_id" id="npc_id">
+        <option value="">Maître du jeu</option>
+        <% @npcs.each do |npc| %>
+          <option value="<%= npc.id %>" <%= "selected" if @default_npc&.id == npc.id %>><%= npc.name %></option>
+        <% end %>
+      </select>
+    </div>
+    <div class="row">
+      <input type="text" name="body" placeholder="Message du PNJ…" autocomplete="off" required style="flex: 1;">
+      <button type="submit" class="btn">Envoyer</button>
+    </div>
+  <% end %>
+</div>
+
+<%= link_to "Retour aux parties", admin_quest_progresses_path, class: "btn secondary" %>

@@ -1,0 +1,11 @@
+<% content_for :title, @npc.name %>
+
+<h1><%= @npc.name %></h1>
+<div class="panel">
+  <% if @npc.avatar.attached? %>
+    <%= image_tag @npc.avatar, style: "max-width: 200px;" %>
+  <% end %>
+  <p>PV : <%= @npc.max_health %> · Force : <%= @npc.force %></p>
+  <%= link_to "Éditer", edit_admin_npc_path(@npc), class: "btn secondary" %>
+  <%= link_to "Retour", admin_npcs_path, class: "btn secondary" %>
+</div>

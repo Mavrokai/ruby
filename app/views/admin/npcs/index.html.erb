@@ -1,0 +1,34 @@
+<% content_for :title, "PNJ" %>
+
+<div class="row between">
+  <h1>PNJ</h1>
+  <%= link_to "Nouveau PNJ", new_admin_npc_path, class: "btn" %>
+</div>
+
+<% if @npcs.empty? %>
+  <div class="panel empty-state">Aucun PNJ. Créez-en pour pouvoir construire des étapes de quête.</div>
+<% else %>
+  <table class="data">
+    <thead><tr><th>Avatar</th><th>Nom</th><th>PV</th><th>Force</th><th></th></tr></thead>
+    <tbody>
+      <% @npcs.each do |npc| %>
+        <tr>
+          <td>
+            <% if npc.avatar.attached? %>
+              <%= image_tag npc.avatar, style: "width: 48px; height: 48px; border-radius: 50%; object-fit: cover;" %>
+            <% else %>
+              –
+            <% end %>
+          </td>
+          <td><%= npc.name %></td>
+          <td><%= npc.max_health %></td>
+          <td><%= npc.force %></td>
+          <td class="right">
+            <%= link_to "Éditer", edit_admin_npc_path(npc), class: "btn secondary" %>
+            <%= button_to "Supprimer", admin_npc_path(npc), method: :delete, form: { class: "inline-form", data: { turbo_confirm: "Supprimer ?" } }, class: "btn danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

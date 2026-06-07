@@ -1,0 +1,9 @@
+goblin:
+  name: Gobelin
+  max_health: 8
+  force: 3
+
+troll:
+  name: Troll
+  max_health: 50
+  force: 50

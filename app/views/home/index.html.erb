@@ -1,0 +1,23 @@
+<% content_for :title, "Accueil" %>
+
+<div class="container narrow center">
+  <h1>Mediaval RPG</h1>
+  <p class="muted">Une aventure de quêtes, d'énigmes et de combats au tour par tour.</p>
+
+  <div class="panel" style="margin-top: 2rem;">
+    <h2>Commencez votre légende</h2>
+    <div class="menu-grid">
+      <%= link_to new_player_path, class: "menu-card" do %>
+        <h3>Nouveau héros</h3>
+        <p class="muted">Créer un personnage de niveau 1 et choisir vos points de départ.</p>
+      <% end %>
+
+      <%= link_to select_players_path, class: "menu-card" do %>
+        <h3>Reprendre une partie</h3>
+        <p class="muted">Sélectionner un héros existant et poursuivre l'aventure.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <p class="muted">Vous êtes le maître du jeu ? <%= link_to "Gérer le contenu", admin_root_path %></p>
+</div>

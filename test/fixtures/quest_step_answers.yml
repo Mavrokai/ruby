@@ -1,0 +1,19 @@
+step_one_correct:
+  quest_step: step_one
+  content: "4"
+  correct: true
+
+step_one_wrong:
+  quest_step: step_one
+  content: "5"
+  correct: false
+
+step_boss_correct:
+  quest_step: step_boss
+  content: Paris
+  correct: true
+
+step_boss_wrong:
+  quest_step: step_boss
+  content: Londres
+  correct: false

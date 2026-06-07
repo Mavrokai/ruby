@@ -1,29 +1,49 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "W Web 401 Lil 4 1 Ruby 1" %></title>
+    <title><%= content_for(:title) || "Medieval RPG" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="W Web 401 Lil 4 1 Ruby 1">
-    <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
-    <%= yield %>
+    <header class="app-header">
+      <%= link_to "Mediaval RPG", root_path, class: "brand" %>
+      <nav>
+        <% if signed_in? %>
+          <%= link_to "Menu", game_menu_path %>
+          <%= link_to "Personnage", game_character_path %>
+          <%= link_to "Inventaire", game_inventory_path %>
+          <%= link_to "Quêtes", quests_path %>
+          <%= link_to "Hôtel des ventes", market_listings_path %>
+          <span class="muted">|</span>
+          <span class="muted"><%= current_player.name %> – Niv. <%= current_player.level %> · 💰 <%= current_player.gold %></span>
+          <%= button_to "Déconnexion", logout_players_path, method: :post, form: { class: "inline-form" } %>
+        <% else %>
+          <%= link_to "Accueil", root_path %>
+          <%= link_to "Choisir un héros", select_players_path %>
+        <% end %>
+        <%= link_to "Maître du jeu", admin_root_path %>
+      </nav>
+    </header>
+
+    <main class="container">
+      <% flash.each do |type, message| %>
+        <% next if type.to_s == "combat_log" %>
+        <div class="flash <%= type %>"><%= message %></div>
+      <% end %>
+      <%= yield %>
+    </main>
   </body>
 </html>

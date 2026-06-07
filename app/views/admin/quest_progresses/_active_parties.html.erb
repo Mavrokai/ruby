@@ -1,0 +1,25 @@
+<div id="admin-active-parties">
+  <div class="panel">
+    <h2 class="panel-title">Parties actives (<%= progresses.size %>) <span class="live-dot" title="Temps réel"></span></h2>
+    <% if progresses.empty? %>
+      <p class="muted">Aucune partie en cours.</p>
+    <% else %>
+      <table class="data">
+        <thead><tr><th>Héros</th><th>Quête</th><th>Étape</th><th>PV héros</th><th>Combat</th><th>Dernière action</th><th></th></tr></thead>
+        <tbody>
+          <% progresses.each do |p| %>
+            <tr>
+              <td><%= link_to p.player.name, admin_player_path(p.player) %></td>
+              <td><%= p.quest.title %></td>
+              <td><%= p.current_step_position %> / <%= p.quest.quest_steps.size %></td>
+              <td><%= p.player.current_health %> / <%= p.player.total_max_health %></td>
+              <td><%= p.in_combat? ? "PNJ #{p.current_npc_health} PV" : "—" %></td>
+              <td><%= l(p.updated_at, format: :short) rescue p.updated_at %></td>
+              <td class="right"><%= link_to "Chat / Suivi", admin_quest_progress_path(p), class: "btn secondary" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </div>
+</div>

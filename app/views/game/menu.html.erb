@@ -1,0 +1,51 @@
+<% content_for :title, "Menu" %>
+
+<h1>Bonjour, <%= current_player.name %></h1>
+<p class="muted">Niveau <%= current_player.level %> · <%= current_player.experience %> / <%= Player::XP_FOR_LEVEL %> XP · 💰 <%= current_player.gold %> or</p>
+
+<% if current_player.available_stat_points.positive? %>
+  <div class="flash notice">
+    Vous avez <strong><%= current_player.available_stat_points %></strong> point(s) de caractéristique à répartir.
+    <%= link_to "Répartir maintenant", allocate_points_player_path(current_player) %>
+  </div>
+<% end %>
+
+<div class="menu-grid">
+  <%= link_to game_character_path, class: "menu-card" do %>
+    <h3>Mon personnage</h3>
+    <p class="muted">Consulter mes caractéristiques.</p>
+  <% end %>
+
+  <%= link_to game_inventory_path, class: "menu-card" do %>
+    <h3>Inventaire</h3>
+    <p class="muted">Équiper et personnaliser mes objets.</p>
+  <% end %>
+
+  <%= link_to market_listings_path, class: "menu-card" do %>
+    <h3>Hôtel des ventes</h3>
+    <p class="muted">Acheter et revendre des objets contre de l'or.</p>
+  <% end %>
+
+  <%= link_to edit_player_path(current_player), class: "menu-card" do %>
+    <h3>Personnaliser</h3>
+    <p class="muted">Changer mon portrait et ma couleur.</p>
+  <% end %>
+
+  <%= link_to quests_path, class: "menu-card" do %>
+    <h3>Quêtes</h3>
+    <p class="muted">
+      <% if @active_progress %>
+        Continuer : <strong><%= @active_progress.quest.title %></strong>
+      <% else %>
+        Choisir une nouvelle quête.
+      <% end %>
+    </p>
+  <% end %>
+
+  <% if @active_progress %>
+    <%= link_to quest_progress_path(@active_progress), class: "menu-card" do %>
+      <h3>Reprendre la quête</h3>
+      <p class="muted">Étape <%= @active_progress.current_step_position %></p>
+    <% end %>
+  <% end %>
+</div>

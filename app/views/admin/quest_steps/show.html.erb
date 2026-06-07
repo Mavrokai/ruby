@@ -1,0 +1,40 @@
+<% content_for :title, "Étape #{@quest_step.position}" %>
+
+<h1>Étape <%= @quest_step.position %> – <%= @quest.title %></h1>
+
+<div class="panel">
+  <p><strong>Énigme :</strong> <%= @quest_step.riddle_question %></p>
+  <p><strong>PNJ :</strong> <%= @quest_step.npc.name %> (Force <%= @quest_step.npc.force %>, PV <%= @quest_step.npc.max_health %>)</p>
+  <p><strong>XP gagnée :</strong> <%= @quest_step.step_xp_reward %></p>
+</div>
+
+<div class="panel">
+  <div class="row between">
+    <h2 style="margin: 0;">Réponses</h2>
+    <%= link_to "Ajouter une réponse", new_admin_quest_quest_step_quest_step_answer_path(@quest, @quest_step), class: "btn" %>
+  </div>
+
+  <% if @quest_step.answers.empty? %>
+    <p class="muted">Aucune réponse pour l'instant.</p>
+  <% else %>
+    <table class="data">
+      <thead>
+        <tr><th>Contenu</th><th>Correcte ?</th><th></th></tr>
+      </thead>
+      <tbody>
+        <% @quest_step.answers.each do |answer| %>
+          <tr>
+            <td><%= answer.content %></td>
+            <td><%= answer.correct? ? "Oui" : "Non" %></td>
+            <td class="right">
+              <%= link_to "Éditer", edit_admin_quest_quest_step_quest_step_answer_path(@quest, @quest_step, answer), class: "btn secondary" %>
+              <%= button_to "Supprimer", admin_quest_quest_step_quest_step_answer_path(@quest, @quest_step, answer), method: :delete, form: { class: "inline-form", data: { turbo_confirm: "Supprimer cette réponse ?" } }, class: "btn danger" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>
+
+<p><%= link_to "Retour à la quête", admin_quest_path(@quest), class: "btn secondary" %></p>

@@ -1,0 +1,38 @@
+<% content_for :title, "Objets" %>
+
+<div class="row between">
+  <h1>Objets</h1>
+  <%= link_to "Nouvel objet", new_admin_item_path, class: "btn" %>
+</div>
+
+<% if @items.empty? %>
+  <div class="panel empty-state">Aucun objet. Créez-en pour pouvoir les distribuer en fin de quête.</div>
+<% else %>
+  <table class="data">
+    <thead>
+      <tr><th></th><th>Nom</th><th>Slot</th><th>Force</th><th>PV</th><th>XP/étape</th><th></th></tr>
+    </thead>
+    <tbody>
+      <% @items.each do |item| %>
+        <tr>
+          <td>
+            <% if item.image.attached? %>
+              <%= image_tag item.image, style: "width: 48px; height: 48px; object-fit: cover; border-radius: 4px;" %>
+            <% else %>
+              –
+            <% end %>
+          </td>
+          <td><%= item.name %></td>
+          <td><span class="tag slot-<%= item.slot %>"><%= item.slot_label %></span></td>
+          <td><%= item.force_bonus %></td>
+          <td><%= item.health_bonus %></td>
+          <td><%= item.xp_bonus %></td>
+          <td class="right">
+            <%= link_to "Éditer", edit_admin_item_path(item), class: "btn secondary" %>
+            <%= button_to "Supprimer", admin_item_path(item), method: :delete, form: { class: "inline-form", data: { turbo_confirm: "Supprimer ?" } }, class: "btn danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

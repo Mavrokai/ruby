@@ -1,0 +1,93 @@
+<% content_for :title, "Inventaire" %>
+
+<div class="row between">
+  <h1>Inventaire</h1>
+  <span class="gold-badge">💰 <%= current_player.gold %> or</span>
+</div>
+<p class="muted">Équipez un objet par emplacement. Les bonus/malus s'appliquent immédiatement à vos caractéristiques.</p>
+
+<div class="panel">
+  <h2 class="panel-title">Équipement</h2>
+  <div class="item-grid">
+    <% Player::EQUIPMENT_SLOT_ROWS.each do |slot, reader, label| %>
+      <% item = current_player.public_send(reader) %>
+      <% inv = item && @inventory_by_item_id[item.id] %>
+      <div class="item-card<%= " equipped" if item %>">
+        <span class="tag slot-<%= slot %>"><%= label %></span>
+        <% if item %>
+          <h3 style="margin: 0;"><%= item.name %></h3>
+          <% image = inv&.display_image %>
+          <% if image %>
+            <div class="item-image"><%= image_tag image %></div>
+          <% end %>
+          <div class="bonus-list">
+            <% if item.force_bonus != 0 %><span>Force <%= item.force_bonus >= 0 ? "+" : "" %><%= item.force_bonus %></span><% end %>
+            <% if item.health_bonus != 0 %><span>PV <%= item.health_bonus >= 0 ? "+" : "" %><%= item.health_bonus %></span><% end %>
+            <% if item.xp_bonus != 0 %><span>XP <%= item.xp_bonus >= 0 ? "+" : "" %><%= item.xp_bonus %></span><% end %>
+          </div>
+          <%= button_to "Retirer", game_unequip_path(slot: slot), method: :delete, class: "btn secondary" %>
+        <% else %>
+          <p class="muted">Aucun objet équipé.</p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="panel">
+  <h2 class="panel-title">Sac à dos</h2>
+  <% if @inventory.empty? %>
+    <div class="empty-state">Votre sac est vide. Terminez des quêtes pour gagner des objets !</div>
+  <% else %>
+    <div class="item-grid">
+      <% @inventory.each do |inv| %>
+        <% item = inv.item %>
+        <% equipped = inv.equipped? %>
+        <div class="item-card<%= " equipped" if equipped %>">
+          <div class="row between">
+            <span class="tag slot-<%= item.slot %>"><%= item.slot_label %></span>
+            <% if equipped %><span class="muted">Équipé</span><% end %>
+          </div>
+          <h3 style="margin: 0;"><%= item.name %></h3>
+          <% if inv.display_image %>
+            <div class="item-image"><%= image_tag inv.display_image %></div>
+          <% end %>
+          <% if item.description.present? %>
+            <p class="muted" style="margin: 0;"><%= item.description %></p>
+          <% end %>
+          <div class="bonus-list">
+            <% if item.force_bonus != 0 %><span>Force <%= item.force_bonus >= 0 ? "+" : "" %><%= item.force_bonus %></span><% end %>
+            <% if item.health_bonus != 0 %><span>PV <%= item.health_bonus >= 0 ? "+" : "" %><%= item.health_bonus %></span><% end %>
+            <% if item.xp_bonus != 0 %><span>XP <%= item.xp_bonus >= 0 ? "+" : "" %><%= item.xp_bonus %></span><% end %>
+          </div>
+
+          <% unless equipped %>
+            <%= button_to "Équiper", game_equip_path(inventory_item_id: inv.id), method: :post, class: "btn" %>
+          <% end %>
+
+          <details>
+            <summary class="muted">Personnaliser l'apparence</summary>
+            <%= form_with url: customize_inventory_path(inv), method: :post, html: { multipart: true }, local: true do %>
+              <div class="field">
+                <%= file_field_tag :custom_image, accept: "image/*", required: true %>
+              </div>
+              <div class="btn-row">
+                <button type="submit" class="btn secondary">Appliquer</button>
+                <% if inv.custom_image.attached? %>
+                  <%= button_to "Réinitialiser", decustomize_inventory_path(inv), method: :delete, class: "btn secondary" %>
+                <% end %>
+              </div>
+            <% end %>
+          </details>
+
+          <% unless equipped || inv.listed? %>
+            <%= link_to "Vendre à l'hôtel des ventes", new_market_listing_path(inventory_item_id: inv.id), class: "btn secondary" %>
+          <% end %>
+          <% if inv.listed? %>
+            <span class="tag">En vente</span>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,13 @@
+step_one:
+  quest: forest
+  position: 1
+  step_xp_reward: 10
+  npc: goblin
+  riddle_question: Combien font 2 + 2 ?
+
+step_boss:
+  quest: forest
+  position: 2
+  step_xp_reward: 20
+  npc: troll
+  riddle_question: Quelle est la capitale de la France ?

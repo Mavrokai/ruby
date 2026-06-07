@@ -1,0 +1,49 @@
+<% content_for :title, "Hôtel des ventes" %>
+
+<div class="row between">
+  <h1>Hôtel des ventes</h1>
+  <span class="gold-badge">💰 <%= current_player.gold %> or</span>
+</div>
+<p class="muted">Achetez des objets à la boutique ou aux autres héros, et revendez les vôtres.</p>
+
+<div class="panel">
+  <h2 class="panel-title">Boutique</h2>
+  <% if @shop_listings.empty? %>
+    <p class="muted">La boutique est vide pour le moment.</p>
+  <% else %>
+    <div class="item-grid">
+      <%= render partial: "market_listings/listing", collection: @shop_listings, as: :listing %>
+    </div>
+  <% end %>
+</div>
+
+<div class="panel">
+  <h2 class="panel-title">Ventes des autres héros</h2>
+  <% if @player_listings.empty? %>
+    <p class="muted">Aucun autre héros ne vend d'objet actuellement.</p>
+  <% else %>
+    <div class="item-grid">
+      <%= render partial: "market_listings/listing", collection: @player_listings, as: :listing %>
+    </div>
+  <% end %>
+</div>
+
+<div class="panel">
+  <h2 class="panel-title">Mes ventes en cours</h2>
+  <% if @my_listings.empty? %>
+    <p class="muted">Vous ne vendez aucun objet. Mettez-en un en vente depuis votre <%= link_to "inventaire", game_inventory_path %>.</p>
+  <% else %>
+    <div class="item-grid">
+      <% @my_listings.each do |listing| %>
+        <div class="item-card">
+          <div class="row between">
+            <span class="tag slot-<%= listing.item.slot %>"><%= listing.item.slot_label %></span>
+            <span class="gold-badge">💰 <%= listing.price %></span>
+          </div>
+          <h3 style="margin: 0;"><%= listing.item.name %></h3>
+          <%= button_to "Retirer de la vente", market_listing_path(listing), method: :delete, class: "btn secondary" %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

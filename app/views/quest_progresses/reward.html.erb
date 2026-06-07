@@ -1,0 +1,37 @@
+<% content_for :title, "Récompense" %>
+
+<h1>Quête terminée !</h1>
+<p>Bravo, vous avez achevé <strong><%= @progress.quest.title %></strong>.</p>
+
+<% if @reward_items.any? %>
+  <div class="panel">
+    <h2 class="panel-title">Choisissez votre récompense</h2>
+    <div class="item-grid">
+      <% @reward_items.each do |item| %>
+        <div class="item-card">
+          <span class="tag slot-<%= item.slot %>"><%= item.slot_label %></span>
+          <h3 style="margin: 0;"><%= item.name %></h3>
+          <% if item.image.attached? %>
+            <div class="item-image"><%= image_tag item.image %></div>
+          <% end %>
+          <% if item.description.present? %>
+            <p class="muted" style="margin: 0;"><%= item.description %></p>
+          <% end %>
+          <div class="bonus-list">
+            <% if item.force_bonus != 0 %><span>Force <%= item.force_bonus >= 0 ? "+" : "" %><%= item.force_bonus %></span><% end %>
+            <% if item.health_bonus != 0 %><span>PV <%= item.health_bonus >= 0 ? "+" : "" %><%= item.health_bonus %></span><% end %>
+            <% if item.xp_bonus != 0 %><span>XP <%= item.xp_bonus >= 0 ? "+" : "" %><%= item.xp_bonus %></span><% end %>
+          </div>
+          <%= button_to "Choisir", choose_reward_quest_progress_path(@progress, item_id: item.id), method: :post, class: "btn" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <div class="panel empty-state">
+    Le maître du jeu n'a pas configuré de récompense pour cette quête.
+    <div class="btn-row" style="justify-content: center;">
+      <%= link_to "Retour au menu", game_menu_path, class: "btn" %>
+    </div>
+  </div>
+<% end %>

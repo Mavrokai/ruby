@@ -1,0 +1,54 @@
+<%= form_with model: [ :admin, item ], local: true, html: { multipart: true }, class: "panel" do |f| %>
+  <% if item.errors.any? %>
+    <div class="errors">
+      <ul>
+        <% item.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name, "Nom" %>
+    <%= f.text_field :name, required: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :slot, "Emplacement" %>
+    <%= f.select :slot, Item::SLOTS.map { |s| [ Item.new(slot: s).slot_label, s ] } %>
+  </div>
+
+  <div class="field">
+    <%= f.label :force_bonus, "Bonus de Force" %>
+    <%= f.number_field :force_bonus %>
+  </div>
+
+  <div class="field">
+    <%= f.label :health_bonus, "Bonus de PV max" %>
+    <%= f.number_field :health_bonus %>
+  </div>
+
+  <div class="field">
+    <%= f.label :xp_bonus, "Bonus d'XP par étape" %>
+    <%= f.number_field :xp_bonus %>
+  </div>
+
+  <div class="field">
+    <%= f.label :description, "Description" %>
+    <%= f.text_area :description %>
+  </div>
+
+  <div class="field">
+    <%= f.label :image, "Image" %>
+    <%= f.file_field :image, accept: "image/*" %>
+    <% if item.image.attached? %>
+      <%= image_tag item.image, style: "max-width: 120px; margin-top: 0.5rem;" %>
+    <% end %>
+  </div>
+
+  <div class="btn-row">
+    <%= f.submit class: "btn" %>
+    <%= link_to "Annuler", admin_items_path, class: "btn secondary" %>
+  </div>
+<% end %>

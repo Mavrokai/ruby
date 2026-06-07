@@ -1,0 +1,27 @@
+<% content_for :title, "Mettre en vente" %>
+
+<div class="container narrow">
+  <h1>Mettre en vente</h1>
+
+  <div class="panel">
+    <h2 class="panel-title"><%= @inventory_item.name %></h2>
+    <p class="muted"><span class="tag slot-<%= @inventory_item.slot %>"><%= @inventory_item.slot_label %></span></p>
+    <div class="bonus-list">
+      <% if @inventory_item.force_bonus != 0 %><span>Force <%= @inventory_item.force_bonus %></span><% end %>
+      <% if @inventory_item.health_bonus != 0 %><span>PV <%= @inventory_item.health_bonus %></span><% end %>
+      <% if @inventory_item.xp_bonus != 0 %><span>XP <%= @inventory_item.xp_bonus %></span><% end %>
+    </div>
+
+    <%= form_with url: market_listings_path, method: :post, local: true do %>
+      <%= hidden_field_tag :inventory_item_id, @inventory_item.id %>
+      <div class="field">
+        <label for="price">Prix de vente (or)</label>
+        <input type="number" name="price" id="price" min="0" value="<%= @listing.price %>" required>
+      </div>
+      <div class="btn-row">
+        <button type="submit" class="btn">Mettre en vente</button>
+        <%= link_to "Annuler", game_inventory_path, class: "btn secondary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

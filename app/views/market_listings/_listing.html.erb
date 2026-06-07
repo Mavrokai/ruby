@@ -1,0 +1,25 @@
+<% item = listing.item %>
+<div class="item-card">
+  <div class="row between">
+    <span class="tag slot-<%= item.slot %>"><%= item.slot_label %></span>
+    <span class="gold-badge">💰 <%= listing.price %></span>
+  </div>
+  <h3 style="margin: 0;"><%= item.name %></h3>
+  <% if item.image.attached? %>
+    <div class="item-image"><%= image_tag item.image %></div>
+  <% end %>
+  <p class="muted" style="margin: 0;">Vendeur : <%= listing.seller_name %></p>
+  <div class="bonus-list">
+    <% if item.force_bonus != 0 %><span>Force <%= item.force_bonus >= 0 ? "+" : "" %><%= item.force_bonus %></span><% end %>
+    <% if item.health_bonus != 0 %><span>PV <%= item.health_bonus >= 0 ? "+" : "" %><%= item.health_bonus %></span><% end %>
+    <% if item.xp_bonus != 0 %><span>XP <%= item.xp_bonus >= 0 ? "+" : "" %><%= item.xp_bonus %></span><% end %>
+  </div>
+  <% already_owned = current_player.owned_items.include?(item) %>
+  <% if already_owned %>
+    <span class="muted">Déjà possédé</span>
+  <% elsif current_player.can_afford?(listing.price) %>
+    <%= button_to "Acheter", buy_market_listing_path(listing), method: :post, class: "btn" %>
+  <% else %>
+    <button class="btn secondary" disabled>Or insuffisant</button>
+  <% end %>
+</div>

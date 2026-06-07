@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Maître du jeu — <%= content_for(:title) || "Administration" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <div class="admin-shell">
+      <aside class="admin-sidebar">
+        <h2>Maître du jeu</h2>
+        <nav>
+          <%= link_to "Tableau de bord", admin_root_path %>
+          <%= link_to "Parties en cours", admin_quest_progresses_path %>
+          <%= link_to "Héros", admin_players_path %>
+          <hr class="divider">
+          <%= link_to "Quêtes", admin_quests_path %>
+          <%= link_to "PNJ", admin_npcs_path %>
+          <%= link_to "Objets", admin_items_path %>
+          <%= link_to "Hôtel des ventes", admin_market_listings_path %>
+          <hr class="divider">
+          <%= link_to "Retour au jeu", root_path %>
+        </nav>
+      </aside>
+
+      <section class="admin-main">
+        <% flash.each do |type, message| %>
+          <div class="flash <%= type %>"><%= message %></div>
+        <% end %>
+        <%= yield %>
+      </section>
+    </div>
+  </body>
+</html>

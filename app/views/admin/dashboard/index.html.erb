@@ -1,0 +1,52 @@
+<% content_for :title, "Tableau de bord" %>
+
+<h1>Tableau de bord</h1>
+<p class="muted">Gérez tout le contenu du jeu depuis cette interface.</p>
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="label">Quêtes</div>
+    <div class="value"><%= @quests_count %></div>
+  </div>
+  <div class="stat-card">
+    <div class="label">PNJ</div>
+    <div class="value"><%= @npcs_count %></div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Objets</div>
+    <div class="value"><%= @items_count %></div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Héros</div>
+    <div class="value"><%= @players_count %></div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="menu-grid">
+  <%= link_to admin_quest_progresses_path, class: "menu-card" do %>
+    <h3>Parties en cours</h3>
+    <p class="muted">Voir l'état des parties des joueurs.</p>
+  <% end %>
+  <%= link_to admin_players_path, class: "menu-card" do %>
+    <h3>Héros</h3>
+    <p class="muted">Liste et fiches des héros.</p>
+  <% end %>
+  <%= link_to admin_quests_path, class: "menu-card" do %>
+    <h3>Gérer les quêtes</h3>
+    <p class="muted">Quêtes, étapes, énigmes et récompenses.</p>
+  <% end %>
+  <%= link_to admin_npcs_path, class: "menu-card" do %>
+    <h3>Gérer les PNJ</h3>
+    <p class="muted">Créer les adversaires et leurs avatars.</p>
+  <% end %>
+  <%= link_to admin_items_path, class: "menu-card" do %>
+    <h3>Gérer les objets</h3>
+    <p class="muted">Chapeaux, armes, boucliers et leurs effets.</p>
+  <% end %>
+  <%= link_to admin_market_listings_path, class: "menu-card" do %>
+    <h3>Hôtel des ventes</h3>
+    <p class="muted">Gérer la boutique et suivre les échanges.</p>
+  <% end %>
+</div>

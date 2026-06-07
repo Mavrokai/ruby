@@ -1,0 +1,81 @@
+<% content_for :title, "Personnage" %>
+
+<h1>Mon personnage</h1>
+
+<div class="panel">
+  <div class="row between">
+    <div class="row" style="gap: 2rem;">
+      <div class="avatar" style="border-color: <%= current_player.accent_color %>;">
+        <% if current_player.avatar.attached? %>
+          <%= image_tag current_player.avatar %>
+        <% else %>
+          <%= current_player.name.first.upcase %>
+        <% end %>
+      </div>
+      <div>
+        <h2><%= current_player.name %></h2>
+        <p class="muted">Niveau <%= current_player.level %></p>
+      </div>
+    </div>
+    <%= link_to "Personnaliser", edit_player_path(current_player), class: "btn secondary" %>
+  </div>
+
+  <hr class="divider">
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="label">PV</div>
+      <div class="value"><%= current_player.current_health %> / <%= current_player.total_max_health %></div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Force</div>
+      <div class="value"><%= current_player.total_force %></div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Bonus XP / étape</div>
+      <div class="value">+<%= current_player.step_xp_bonus %></div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Expérience</div>
+      <div class="value"><%= current_player.experience %> / <%= Player::XP_FOR_LEVEL %></div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Or</div>
+      <div class="value"><%= current_player.gold %></div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Points à répartir</div>
+      <div class="value"><%= current_player.available_stat_points %></div>
+    </div>
+  </div>
+
+  <% if current_player.available_stat_points.positive? %>
+    <div class="btn-row">
+      <%= link_to "Répartir mes points", allocate_points_player_path(current_player), class: "btn" %>
+    </div>
+  <% end %>
+</div>
+
+<div class="panel">
+  <h2 class="panel-title">Équipement actuel</h2>
+  <div class="item-grid">
+    <% Player::EQUIPMENT_SLOT_ROWS.each do |slot, reader, label| %>
+      <% item = current_player.public_send(reader) %>
+      <div class="item-card<%= " equipped" if item %>">
+        <div class="row between">
+          <span class="tag slot-<%= slot %>"><%= label %></span>
+        </div>
+        <% if item %>
+          <h3 style="margin: 0;"><%= item.name %></h3>
+          <div class="bonus-list">
+            <% if item.force_bonus != 0 %><span>Force <%= item.force_bonus >= 0 ? "+" : "" %><%= item.force_bonus %></span><% end %>
+            <% if item.health_bonus != 0 %><span>PV <%= item.health_bonus >= 0 ? "+" : "" %><%= item.health_bonus %></span><% end %>
+            <% if item.xp_bonus != 0 %><span>XP <%= item.xp_bonus >= 0 ? "+" : "" %><%= item.xp_bonus %></span><% end %>
+          </div>
+        <% else %>
+          <p class="muted">Aucun objet équipé.</p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

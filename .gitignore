@@ -7,6 +7,9 @@
 # Ignore bundler config.
 /.bundle
 
+# Ignore locally installed gems.
+/vendor/bundle
+
 # Ignore all environment files.
 /.env*
 
@@ -32,4 +35,7 @@
 
 # Ignore key files for decrypting credentials and more.
 /config/*.key
+
+# Ignore design reference assets (not used by the app).
+/public/equipements_steampunk_reference.png
 

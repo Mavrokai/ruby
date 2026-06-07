@@ -1,0 +1,39 @@
+<%= form_with model: [ :admin, npc ], local: true, html: { multipart: true }, class: "panel" do |f| %>
+  <% if npc.errors.any? %>
+    <div class="errors">
+      <ul>
+        <% npc.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name, "Nom" %>
+    <%= f.text_field :name, required: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :max_health, "Points de vie" %>
+    <%= f.number_field :max_health, min: 1, required: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :force, "Force" %>
+    <%= f.number_field :force, min: 1, required: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :avatar, "Avatar" %>
+    <%= f.file_field :avatar, accept: "image/*" %>
+    <% if npc.avatar.attached? %>
+      <%= image_tag npc.avatar, style: "max-width: 120px; margin-top: 0.5rem;" %>
+    <% end %>
+  </div>
+
+  <div class="btn-row">
+    <%= f.submit class: "btn" %>
+    <%= link_to "Annuler", admin_npcs_path, class: "btn secondary" %>
+  </div>
+<% end %>

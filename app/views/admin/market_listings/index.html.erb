@@ -1,0 +1,49 @@
+<% content_for :title, "Hôtel des ventes" %>
+
+<div class="row between">
+  <h1>Hôtel des ventes</h1>
+  <%= link_to "Ajouter un objet à la boutique", new_admin_market_listing_path, class: "btn" %>
+</div>
+
+<div class="panel">
+  <h2 class="panel-title">Stock de la boutique (<%= @shop_listings.size %>)</h2>
+  <% if @shop_listings.empty? %>
+    <p class="muted">Aucun objet en boutique. Ajoutez-en pour que les joueurs puissent les acheter.</p>
+  <% else %>
+    <table class="data">
+      <thead><tr><th>Objet</th><th>Emplacement</th><th>Prix</th><th></th></tr></thead>
+      <tbody>
+        <% @shop_listings.each do |listing| %>
+          <tr>
+            <td><%= listing.item.name %></td>
+            <td><%= listing.item.slot_label %></td>
+            <td>💰 <%= listing.price %></td>
+            <td class="right"><%= button_to "Retirer", admin_market_listing_path(listing), method: :delete, class: "btn secondary" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>
+
+<div class="panel">
+  <h2 class="panel-title">Ventes entre joueurs</h2>
+  <% if @player_listings.empty? %>
+    <p class="muted">Aucune transaction entre joueurs pour l'instant.</p>
+  <% else %>
+    <table class="data">
+      <thead><tr><th>Objet</th><th>Vendeur</th><th>Prix</th><th>Statut</th><th>Acheteur</th></tr></thead>
+      <tbody>
+        <% @player_listings.each do |listing| %>
+          <tr>
+            <td><%= listing.item.name %></td>
+            <td><%= listing.seller&.name %></td>
+            <td>💰 <%= listing.price %></td>
+            <td><span class="tag"><%= listing.status %></span></td>
+            <td><%= listing.buyer&.name || "—" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>

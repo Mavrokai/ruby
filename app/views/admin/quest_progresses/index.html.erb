@@ -1,0 +1,33 @@
+<% content_for :title, "Parties en cours" %>
+
+<h1>État des parties</h1>
+<p class="muted">Suivi en temps réel de l'avancée des joueurs (mise à jour automatique).</p>
+
+<%= turbo_stream_from "admin_dashboard" %>
+<%= render "admin/quest_progresses/active_parties", progresses: @active %>
+
+<div class="panel">
+  <h2 class="panel-title">Quêtes terminées</h2>
+  <% if @completed.empty? %>
+    <p class="muted">Aucune quête terminée pour l'instant.</p>
+  <% else %>
+    <ul>
+      <% @completed.each do |p| %>
+        <li><strong><%= p.player.name %></strong> a terminé <em><%= p.quest.title %></em></li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>
+
+<div class="panel">
+  <h2 class="panel-title">Game Over récents</h2>
+  <% if @gameover.empty? %>
+    <p class="muted">Aucun game over.</p>
+  <% else %>
+    <ul>
+      <% @gameover.each do |p| %>
+        <li><strong><%= p.player.name %></strong> a échoué sur <em><%= p.quest.title %></em> (étape <%= p.current_step_position %>)</li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>

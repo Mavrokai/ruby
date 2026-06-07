@@ -1,0 +1,65 @@
+<%= form_with model: [ :admin, quest, quest_step ], local: true, class: "panel" do |f| %>
+  <% if quest_step.errors.any? %>
+    <div class="errors">
+      <ul>
+        <% quest_step.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :position, "Position" %>
+    <%= f.number_field :position, min: 1, required: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :riddle_question, "Énoncé de l'énigme" %>
+    <%= f.text_area :riddle_question, required: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :npc_id, "PNJ associé" %>
+    <%= f.collection_select :npc_id, Npc.order(:name), :id, :name, prompt: "Choisir un PNJ" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :step_xp_reward, "XP gagnée après cette étape" %>
+    <%= f.number_field :step_xp_reward, min: 0 %>
+  </div>
+
+  <div class="field">
+    <%= f.label :gold_reward, "Or gagné après cette étape" %>
+    <%= f.number_field :gold_reward, min: 0 %>
+  </div>
+
+  <h3>Réponses</h3>
+  <p class="muted">Une seule réponse doit être marquée comme correcte.</p>
+
+  <%= f.fields_for :answers do |af| %>
+    <div class="panel" style="background: var(--panel-light);">
+      <div class="row">
+        <div class="field" style="flex: 1;">
+          <%= af.label :content, "Réponse" %>
+          <%= af.text_field :content %>
+        </div>
+        <div class="field">
+          <%= af.label :correct, "Correcte" %>
+          <%= af.check_box :correct %>
+        </div>
+        <% if af.object.persisted? %>
+          <div class="field">
+            <%= af.label :_destroy, "Supprimer" %>
+            <%= af.check_box :_destroy %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="btn-row">
+    <%= f.submit class: "btn" %>
+    <%= link_to "Annuler", admin_quest_path(quest), class: "btn secondary" %>
+  </div>
+<% end %>

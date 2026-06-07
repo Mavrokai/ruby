@@ -1,0 +1,3 @@
+<% content_for :title, "Éditer étape" %>
+<h1>Étape <%= @quest_step.position %> – <%= @quest.title %></h1>
+<%= render "form", quest: @quest, quest_step: @quest_step %>

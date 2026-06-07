@@ -1,0 +1,38 @@
+<% content_for :title, "Répartir vos points" %>
+
+<div class="container narrow">
+  <h1>Répartir vos points</h1>
+  <p class="muted">Il vous reste <strong><%= @player.available_stat_points %></strong> point(s) à distribuer entre Force et Points de Vie. Une fois attribués, ils ne pourront plus être modifiés.</p>
+
+  <%= form_with url: spend_points_player_path(@player), method: :post, local: true, class: "panel" do %>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="label">Force actuelle</div>
+        <div class="value"><%= @player.force %></div>
+      </div>
+      <div class="stat-card">
+        <div class="label">PV max actuel</div>
+        <div class="value"><%= @player.max_health %></div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="field">
+      <label for="force_points">Points de Force à ajouter</label>
+      <input type="number" name="force_points" id="force_points" min="0" max="<%= @player.available_stat_points %>" value="0">
+    </div>
+
+    <div class="field">
+      <label for="health_points">Points de Vie à ajouter</label>
+      <input type="number" name="health_points" id="health_points" min="0" max="<%= @player.available_stat_points %>" value="0">
+    </div>
+
+    <div class="btn-row">
+      <button type="submit" class="btn">Valider la répartition</button>
+      <% if @player.available_stat_points.zero? %>
+        <%= link_to "Aller au menu", game_menu_path, class: "btn secondary" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

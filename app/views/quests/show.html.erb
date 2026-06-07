@@ -1,0 +1,25 @@
+<% content_for :title, @quest.title %>
+
+<h1><%= @quest.title %></h1>
+<% if @quest.description.present? %>
+  <p><%= simple_format @quest.description %></p>
+<% end %>
+
+<div class="panel">
+  <h2 class="panel-title">Étapes</h2>
+  <ul>
+    <% @quest.quest_steps.each do |step| %>
+      <li>Étape <%= step.position %> – PNJ : <%= step.npc.name %></li>
+    <% end %>
+  </ul>
+  <p class="muted">Récompense finale : <%= @quest.final_xp_reward %> XP + 1 objet au choix.</p>
+</div>
+
+<div class="btn-row">
+  <%= link_to "Retour aux quêtes", quests_path, class: "btn secondary" %>
+  <% unless current_player.active_quest_progress %>
+    <% if @quest.quest_steps.any? %>
+      <%= button_to "Commencer", start_quest_path(@quest), method: :post, class: "btn" %>
+    <% end %>
+  <% end %>
+</div>

@@ -1,0 +1,67 @@
+<% content_for :title, @quest.title %>
+
+<div class="row between">
+  <h1><%= @quest.title %></h1>
+  <div class="row">
+    <%= link_to "Éditer", edit_admin_quest_path(@quest), class: "btn secondary" %>
+    <%= link_to "Retour", admin_quests_path, class: "btn secondary" %>
+  </div>
+</div>
+
+<% if @quest.description.present? %>
+  <p><%= simple_format @quest.description %></p>
+<% end %>
+
+<p class="muted">XP de fin de quête : <%= @quest.final_xp_reward %>.</p>
+
+<div class="panel">
+  <div class="row between">
+    <h2 style="margin: 0;">Étapes</h2>
+    <%= link_to "Ajouter une étape", new_admin_quest_quest_step_path(@quest), class: "btn" %>
+  </div>
+
+  <% if @quest.quest_steps.empty? %>
+    <div class="empty-state">Aucune étape. Ajoutez-en une pour permettre aux joueurs de commencer la quête.</div>
+  <% else %>
+    <table class="data">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Énigme</th>
+          <th>PNJ</th>
+          <th>XP</th>
+          <th>Réponses</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @quest.quest_steps.each do |step| %>
+          <tr>
+            <td><%= step.position %></td>
+            <td><%= truncate(step.riddle_question, length: 80) %></td>
+            <td><%= step.npc.name %></td>
+            <td><%= step.step_xp_reward %></td>
+            <td><%= step.answers.size %> (<%= step.answers.count(&:correct) %> correctes)</td>
+            <td class="right">
+              <%= link_to "Éditer", edit_admin_quest_quest_step_path(@quest, step), class: "btn secondary" %>
+              <%= button_to "Supprimer", admin_quest_quest_step_path(@quest, step), method: :delete, form: { class: "inline-form", data: { turbo_confirm: "Supprimer cette étape ?" } }, class: "btn danger" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>
+
+<div class="panel">
+  <h2 class="panel-title">Récompenses possibles</h2>
+  <% if @quest.reward_items.empty? %>
+    <p class="muted">Aucun objet n'est proposé en fin de quête. Éditez la quête pour en sélectionner.</p>
+  <% else %>
+    <ul>
+      <% @quest.reward_items.each do |item| %>
+        <li><span class="tag slot-<%= item.slot %>"><%= item.slot_label %></span> <%= item.name %></li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>

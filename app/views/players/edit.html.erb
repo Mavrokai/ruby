@@ -1,0 +1,48 @@
+<% content_for :title, "Personnaliser" %>
+
+<div class="container narrow">
+  <h1>Personnaliser mon héros</h1>
+  <p class="muted">Changez votre portrait, votre nom et la couleur de votre bannière.</p>
+
+  <%= form_with model: @player, url: player_path(@player), method: :patch, local: true, html: { multipart: true }, class: "panel" do |f| %>
+    <% if @player.errors.any? %>
+      <div class="errors">
+        <ul>
+          <% @player.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="center">
+      <div class="avatar" style="border-color: <%= @player.accent_color %>;">
+        <% if @player.avatar.attached? %>
+          <%= image_tag @player.avatar %>
+        <% else %>
+          <%= @player.name.first.upcase %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="field">
+      <%= f.label :name, "Nom du héros" %>
+      <%= f.text_field :name, required: true %>
+    </div>
+
+    <div class="field">
+      <%= f.label :avatar, "Nouveau portrait" %>
+      <%= f.file_field :avatar, accept: "image/*" %>
+    </div>
+
+    <div class="field">
+      <%= f.label :accent_color, "Couleur de bannière" %>
+      <%= f.color_field :accent_color %>
+    </div>
+
+    <div class="btn-row">
+      <%= f.submit "Enregistrer", class: "btn" %>
+      <%= link_to "Retour", game_character_path, class: "btn secondary" %>
+    </div>
+  <% end %>
+</div>

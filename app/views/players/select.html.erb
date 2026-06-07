@@ -1,0 +1,34 @@
+<% content_for :title, "Choisir un héros" %>
+
+<div class="container narrow">
+  <h1>Choisir un héros</h1>
+
+  <% if @players.empty? %>
+    <div class="panel empty-state">
+      <p>Aucun héros n'existe encore.</p>
+      <%= link_to "Créer mon premier héros", new_player_path, class: "btn" %>
+    </div>
+  <% else %>
+    <div class="panel">
+      <% @players.each do |player| %>
+        <%= form_with url: choose_players_path, method: :post, local: true, class: "player-card" do |f| %>
+          <%= f.hidden_field :player_id, value: player.id %>
+          <div class="avatar">
+            <% if player.avatar.attached? %>
+              <%= image_tag player.avatar %>
+            <% else %>
+              <%= player.name.first.upcase %>
+            <% end %>
+          </div>
+          <div class="info">
+            <h3><%= player.name %></h3>
+            <p>Niveau <%= player.level %> · Force <%= player.force %> · PV <%= player.current_health %>/<%= player.max_health %></p>
+          </div>
+          <%= f.submit "Jouer", class: "btn" %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <p class="center"><%= link_to "Créer un nouveau héros", new_player_path, class: "btn secondary" %></p>
+  <% end %>
+</div>

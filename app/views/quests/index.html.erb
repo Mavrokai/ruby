@@ -1,0 +1,44 @@
+<% content_for :title, "Quêtes" %>
+
+<h1>Quêtes disponibles</h1>
+
+<% if @active_progress %>
+  <div class="panel" style="border-color: var(--gold);">
+    <h2 class="panel-title">Quête en cours</h2>
+    <h3><%= @active_progress.quest.title %></h3>
+    <p class="muted">Étape <%= @active_progress.current_step_position %></p>
+    <%= link_to "Continuer la quête", quest_progress_path(@active_progress), class: "btn" %>
+  </div>
+<% end %>
+
+<% if @quests.empty? %>
+  <div class="panel empty-state">
+    Aucune quête disponible. Le maître du jeu doit en créer.
+  </div>
+<% else %>
+  <% @quests.each do |quest| %>
+    <div class="panel">
+      <div class="row between">
+        <div>
+          <h2 style="margin: 0;"><%= quest.title %></h2>
+          <p class="muted">
+            <%= quest.quest_steps.size %> étape(s) · Récompense finale : <%= quest.final_xp_reward %> XP
+            <% if @completed_quest_ids.include?(quest.id) %>· <span style="color: var(--success);">Terminée</span><% end %>
+          </p>
+        </div>
+        <div>
+          <% if @active_progress %>
+            <span class="muted">Une quête est déjà en cours</span>
+          <% elsif quest.quest_steps.empty? %>
+            <span class="muted">Pas encore d'étapes</span>
+          <% else %>
+            <%= button_to "Commencer la quête", start_quest_path(quest), method: :post, class: "btn" %>
+          <% end %>
+        </div>
+      </div>
+      <% if quest.description.present? %>
+        <p><%= simple_format quest.description %></p>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

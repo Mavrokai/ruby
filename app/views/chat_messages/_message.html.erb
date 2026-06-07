@@ -1,0 +1,5 @@
+<div class="chat-msg <%= message.from_gm? ? "from-gm" : "from-player" %>">
+  <div class="chat-author"><%= message.author_label %></div>
+  <div class="chat-bubble"><%= simple_format(message.body) %></div>
+  <div class="chat-time"><%= l(message.created_at, format: :short) rescue message.created_at.strftime("%H:%M") %></div>
+</div>

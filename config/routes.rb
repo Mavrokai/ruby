@@ -1,14 +1,71 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  root "home#index"
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  resources :players, only: [ :new, :create, :edit, :update ] do
+    collection do
+      get :select
+      post :choose
+      post :logout
+    end
+    member do
+      get  :allocate_points
+      post :spend_points
+    end
+  end
+
+  scope "/game", as: :game do
+    get  "/",            to: "game#menu",           as: :menu
+    get  "/character",   to: "game#character",      as: :character
+    get  "/inventory",   to: "game#inventory",      as: :inventory
+    post "/equip/:inventory_item_id", to: "game#equip", as: :equip
+    delete "/equip/:slot",            to: "game#unequip", as: :unequip
+    post   "/customize/:inventory_item_id", to: "game#customize",   as: :customize_inventory
+    delete "/customize/:inventory_item_id", to: "game#decustomize", as: :decustomize_inventory
+  end
+
+  resources :market_listings, only: [ :index, :new, :create, :destroy ] do
+    member do
+      post :buy
+    end
+  end
+
+  resources :quests, only: [ :index, :show ] do
+    member do
+      post :start
+    end
+  end
+
+  resources :quest_progresses, only: [ :show ] do
+    member do
+      post :answer
+      post :start_combat
+      post :attack
+      post :flee
+      get  :reward
+      post :choose_reward
+      get  :gameover
+      post :retry
+      post :send_message
+    end
+  end
+
+  namespace :admin do
+    root to: "dashboard#index"
+    resources :players, only: [ :index, :show ]
+    resources :quest_progresses, only: [ :index, :show ] do
+      member do
+        post :send_message
+      end
+    end
+    resources :market_listings, only: [ :index, :new, :create, :destroy ]
+    resources :quests do
+      resources :quest_steps, except: [ :index ] do
+        resources :quest_step_answers, except: [ :index, :show ]
+      end
+    end
+    resources :npcs
+    resources :items
+  end
 end

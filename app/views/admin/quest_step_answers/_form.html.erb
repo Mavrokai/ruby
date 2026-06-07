@@ -1,0 +1,25 @@
+<%= form_with model: [ :admin, @quest, @quest_step, answer ], local: true, class: "panel" do |f| %>
+  <% if answer.errors.any? %>
+    <div class="errors">
+      <ul>
+        <% answer.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :content, "Contenu de la réponse" %>
+    <%= f.text_field :content, required: true %>
+  </div>
+
+  <div class="field">
+    <label><%= f.check_box :correct %> Bonne réponse</label>
+  </div>
+
+  <div class="btn-row">
+    <%= f.submit class: "btn" %>
+    <%= link_to "Annuler", admin_quest_quest_step_path(@quest, @quest_step), class: "btn secondary" %>
+  </div>
+<% end %>

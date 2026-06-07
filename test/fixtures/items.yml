@@ -1,0 +1,27 @@
+leather_hat:
+  name: Chapeau de cuir
+  slot: hat
+  force_bonus: 0
+  health_bonus: 2
+  xp_bonus: 0
+
+short_sword:
+  name: Épée courte
+  slot: weapon
+  force_bonus: 3
+  health_bonus: 0
+  xp_bonus: 0
+
+small_shield:
+  name: Petit bouclier
+  slot: shield
+  force_bonus: 0
+  health_bonus: 3
+  xp_bonus: 0
+
+magic_staff:
+  name: Bâton magique
+  slot: staff
+  force_bonus: 1
+  health_bonus: 0
+  xp_bonus: 5

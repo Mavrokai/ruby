@@ -1,0 +1,12 @@
+<% content_for :title, @item.name %>
+
+<h1><%= @item.name %> <span class="tag slot-<%= @item.slot %>"><%= @item.slot_label %></span></h1>
+<div class="panel">
+  <% if @item.image.attached? %>
+    <%= image_tag @item.image, style: "max-width: 200px;" %>
+  <% end %>
+  <p>Force <%= @item.force_bonus %> · PV <%= @item.health_bonus %> · XP <%= @item.xp_bonus %></p>
+  <% if @item.description.present? %><p><%= simple_format @item.description %></p><% end %>
+  <%= link_to "Éditer", edit_admin_item_path(@item), class: "btn secondary" %>
+  <%= link_to "Retour", admin_items_path, class: "btn secondary" %>
+</div>
